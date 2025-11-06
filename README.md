@@ -7,14 +7,14 @@ It allows multi-turn conversations, semantic search over uploaded documents, and
 
 ## Features
 
-### 1️⃣ Document Ingestion API
+###  Document Ingestion API
 - Upload `.pdf` or `.txt` files.
 - Extract text and split into chunks (two chunking strategies supported).
 - Generate embeddings for document chunks.
 - Store embeddings in **Qdrant** for semantic search.
 - Save document metadata in **MySQL**.
 
-### 2️⃣ Conversational RAG API
+###  Conversational RAG API
 - Custom RAG (no `RetrievalQAChain` dependency).
 - Supports multi-turn conversations with chat memory stored in **Redis**.
 - Retrieves relevant context from Qdrant embeddings.
