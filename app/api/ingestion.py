@@ -10,9 +10,7 @@ from app.db.qdrant_client import qdrant, COLLECTION_NAME, init_qdrant
 from qdrant_client.models import PointStruct
 from app.db.sql_client import save_document_metadata, save_chunk_metadata
 
-# ------------------------------
-# Enum for chunking strategy
-# ------------------------------
+
 class ChunkStrategy(str, Enum):
     fixed = "fixed"
     paragraph = "paragraph"
@@ -27,9 +25,9 @@ init_qdrant()
 @router.post("/")
 async def ingest_document(
     file: UploadFile = File(...),
-    chunk_strategy: ChunkStrategy = Form(ChunkStrategy.fixed)  # Enum dropdown
+    chunk_strategy: ChunkStrategy = Form(ChunkStrategy.fixed) 
 ):
-    strategy = chunk_strategy.value  # Convert Enum to string
+    strategy = chunk_strategy.value  
 
     file_path = os.path.join(UPLOAD_DIR, file.filename)
     with open(file_path, "wb") as f:

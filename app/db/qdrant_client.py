@@ -1,7 +1,7 @@
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams
 
-# Use in-memory Qdrant (no Docker needed)
+
 qdrant = QdrantClient(":memory:")
 
 COLLECTION_NAME = "documents"
