@@ -1,0 +1,15 @@
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+pydantic==2.7.4
+sqlmodel==0.0.15
+redis==5.0.4
+PyPDF2==3.0.1
+nltk==3.9.1
+aiofiles==23.2.1
+python-dotenv==1.0.1
+qdrant-client==1.10.1
+sentence-transformers==3.1.1
+pymysql==1.1.2
+
+

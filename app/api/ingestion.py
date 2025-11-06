@@ -1,4 +1,3 @@
-# app/api/ingestion.py
 from fastapi import APIRouter, UploadFile, File, Form
 import uuid
 import os
@@ -6,7 +5,8 @@ from app.services.file_reader import extract_text_from_file
 from app.services.chunking import chunk_text
 from app.services.embeddings import get_embeddings
 from app.db.qdrant_client import qdrant, COLLECTION_NAME, init_qdrant
-from app.db.mysql_client import save_document_metadata, save_chunk_metadata
+from qdrant_client.models import PointStruct
+from app.db.sql_client import save_document_metadata, save_chunk_metadata
 
 router = APIRouter(prefix="/ingest", tags=["Document Ingestion"])
 
@@ -31,24 +31,27 @@ async def ingest_document(
 
     document_id = str(uuid.uuid4())
 
-    points = []
-    for chunk, vector in zip(chunks, embeddings):
-        point = {
-            "id": str(uuid.uuid4()),
-            "vector": vector,
-            "payload": {"text": chunk}
-        }
-        points.append(point)
+    points = [
+        PointStruct(
+            id=str(uuid.uuid4()),
+            vector=vector,
+            payload={"text": chunk}
+        )
+        for chunk, vector in zip(chunks, embeddings)
+    ]
+
     qdrant.upsert(collection_name=COLLECTION_NAME, points=points)
+
 
     save_document_metadata(document_id, file.filename, file.filename.split(".")[-1])
 
-    for idx, chunk_text in enumerate(chunks):
+    for idx, chunk in enumerate(chunks):  # ✅ renamed
         chunk_id = str(uuid.uuid4())
-        save_chunk_metadata(chunk_id, document_id, idx, chunk_text)
+        save_chunk_metadata(chunk_id, document_id, idx, chunk)
 
     return {
         "status": "success",
         "chunks_stored": len(chunks),
         "document_id": document_id
     }
+
